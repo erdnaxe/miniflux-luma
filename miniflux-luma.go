@@ -16,7 +16,8 @@ var minifluxEndpoint string
 var feedTitle string
 
 func httpHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Security-Policy", "default-src 'none'")
+	w.Header().Set("Content-Security-Policy", "default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'")
+	w.Header().Set("Referrer-Policy", "no-referrer")
 	w.Header().Set("X-Frame-Options", "DENY")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 
