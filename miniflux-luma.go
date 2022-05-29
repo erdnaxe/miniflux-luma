@@ -16,6 +16,10 @@ var minifluxEndpoint string
 var feedTitle string
 
 func httpHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Security-Policy", "default-src 'none'")
+	w.Header().Set("X-Frame-Options", "DENY")
+	w.Header().Set("X-Content-Type-Options", "nosniff")
+
 	// Get new entries
 	entries, err := miniflux.Entries(&client.Filter{
 		Limit:     10,
