@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"strings"
 	"time"
 
 	"github.com/gorilla/feeds"
@@ -59,6 +61,7 @@ func httpHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	APITokenFile := ""
 	APIToken := ""
 	listenAddress := ""
 	certFile := ""
@@ -66,12 +69,19 @@ func main() {
 
 	// Read command line arguments
 	flag.StringVar(&minifluxEndpoint, "endpoint", "https://miniflux.example.org", "Miniflux server endpoint")
-	flag.StringVar(&APIToken, "api-token", "", "Miniflux API token")
+	flag.StringVar(&APITokenFile, "api-token-file", "api_token", "Load Miniflux API token from file")
 	flag.StringVar(&listenAddress, "listen-addr", "127.0.0.1:8080", "Listen on this address")
 	flag.StringVar(&feedTitle, "feed-title", "Starred entries", "Title of the Atom feed")
 	flag.StringVar(&certFile, "tls-cert", "", "TLS certificate file path (skip to disable TLS)")
 	flag.StringVar(&keyFile, "tls-key", "", "TLS key file path (skip to disable TLS)")
 	flag.Parse()
+
+	// Load API token
+	dat, err := os.ReadFile(APITokenFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+	APIToken = strings.TrimSpace(string(dat))
 
 	// Authentication using API token then fetch starred items
 	miniflux = client.New(minifluxEndpoint, APIToken)
