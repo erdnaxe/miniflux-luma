@@ -28,7 +28,7 @@ func httpHandler(w http.ResponseWriter, r *http.Request) {
 		Limit:     10,
 		Order:     "published_at",
 		Direction: "desc",
-		Starred:   true,
+		Starred:   "1",
 	})
 	if err != nil {
 		fmt.Println(err)
